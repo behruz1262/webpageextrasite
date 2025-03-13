@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information Management Portfolio</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #f5f5f5;
+        }
+        
+        header {
+            background-color: #000;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+        
+        nav {
+            background-color: #1a1a1a;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        nav a {
+            color: #f5f5f5;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #4d94ff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            min-height: 70vh;
+        }
+        
+        footer {
+            background-color: #000;
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            border-top: 1px solid #333;
+        }
+        
+        h1, h2, h3 {
+            color: #4d94ff;
+        }
+        
+        .upload-section {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .assignment-list {
+            margin-top: 30px;
+        }
+        
+        .assignment-item {
+            background-color: #2a2a2a;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        input[type="file"] {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            border: none;
+            color: #f5f5f5;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            background-color: #4d94ff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background-color: #3a7bd5;
+        }
+        
+        .about-content {
+            line-height: 1.6;
+        }
+        
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #333;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Information Management Portfolio</h1>
+        <p>Upload and manage your assignments with ease</p>
+    </header>
+    
+    <nav>
+        <a href="#" onclick="showPage('home')">Home</a>
+        <a href="#" onclick="showPage('assignments')">My Assignments</a>
+        <a href="#" onclick="showPage('upload')">Upload Assignment</a>
+        <a href="#" onclick="showPage('about')">About Me</a>
+    </nav>
+    
+    <div class="container" id="content">
+        <!-- Content will be dynamically loaded here -->
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Information Management Portfolio. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // Keep track of uploaded assignments
+        let assignments = [];
+        
+        // Function to show different pages
+        function showPage(page) {
+            const contentDiv = document.getElementById('content');
+            
+            switch(page) {
+                case 'home':
+                    contentDiv.innerHTML = `
+                        <h2>Welcome to My Information Management Portfolio</h2>
+                        <p>This website serves as a platform for managing and showcasing my assignments for the Information Management course.</p>
+                        <p>Please use the navigation menu to:</p>
+                        <ul>
+                            <li>View my uploaded assignments</li>
+                            <li>Upload new assignments</li>
+                            <li>Learn more about me and my academic journey</li>
+                        </ul>
+                        <p>If you are my professor, please click on the "My Assignments" tab to review my submitted work.</p>
+                    `;
+                    break;
+                
+                case 'assignments':
+                    let assignmentContent = `
+                        <h2>My Assignments</h2>
+                        <p>Below you can find all my uploaded assignments:</p>
+                        <div class="assignment-list">
+                    `;
+                    
+                    if (assignments.length === 0) {
+                        assignmentContent += `
+                            <p>No assignments uploaded yet. Please go to the Upload Assignment page to add your work.</p>
+                        `;
+                    } else {
+                        assignments.forEach((assignment, index) => {
+                            assignmentContent += `
+                                <div class="assignment-item">
+                                    <div>
+                                        <h3>${assignment.title}</h3>
+                                        <p>Uploaded on: ${assignment.date}</p>
+                                    </div>
+                                    <div>
+                                        <button onclick="viewAssignment(${index})">View</button>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    
+                    assignmentContent += `</div>`;
+                    contentDiv.innerHTML = assignmentContent;
+                    break;
+                
+                case 'upload':
+                    contentDiv.innerHTML = `
+                        <h2>Upload Assignment</h2>
+                        <p>Use the form below to upload your assignments:</p>
+                        <div class="upload-section">
+                            <form id="uploadForm" onsubmit="handleUpload(event)">
+                                <div>
+                                    <label for="assignmentTitle">Assignment Title:</label>
+                                    <input type="text" id="assignmentTitle" style="width: 100%; padding: 10px; margin-bottom: 15px; background-color: #333; border: none; color: #f5f5f5; border-radius: 5px;" required>
+                                </div>
+                                <div>
+                                    <label for="assignmentFile">Select File (PDF, DOCX, etc.):</label>
+                                    <input type="file" id="assignmentFile" accept=".pdf,.docx,.pptx,.xlsx" required>
+                                </div>
+                                <div>
+                                    <label for="assignmentDescription">Description (Optional):</label>
+                                    <textarea id="assignmentDescription" style="width: 100%; height: 100px; padding: 10px; margin-bottom: 15px; background-color: #333; border: none; color: #f5f5f5; border-radius: 5px;"></textarea>
+                                </div>
+                                <button type="submit">Upload Assignment</button>
+                            </form>
+                        </div>
+                    `;
+                    break;
+                
+                case 'about':
+                    contentDiv.innerHTML = `
+                        <h2>About Me</h2>
+                        <div class="profile-image">
+                            <span style="font-size: 24px;">Profile Photo</span>
+                        </div>
+                        <div class="about-content">
+                            <p>Hello! I am a student of Information Management, passionate about organizing and managing information effectively.</p>
+                            <p>This portfolio website showcases my assignments and projects for the Information Management course. Through these assignments, I demonstrate my understanding of various concepts related to data organization, storage, retrieval, and management.</p>
+                            <p>My academic interests include:</p>
+                            <ul>
+                                <li>Database Management Systems</li>
+                                <li>Information Architecture</li>
+                                <li>Data Analytics</li>
+                                <li>Knowledge Management</li>
+                            </ul>
+                            <p>Feel free to explore my assignments and projects to get a better understanding of my work and academic progress.</p>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+        
+        // Function to handle assignment upload
+        function handleUpload(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('assignmentTitle').value;
+            const file = document.getElementById('assignmentFile').files[0];
+            const description = document.getElementById('assignmentDescription').value;
+            
+            if (title && file) {
+                // Create a new assignment object
+                const newAssignment = {
+                    title: title,
+                    filename: file.name,
+                    description: description,
+                    date: new Date().toLocaleDateString(),
+                    fileData: URL.createObjectURL(file)
+                };
+                
+                // Add to assignments array
+                assignments.push(newAssignment);
+                
+                // Show success message
+                alert(`Assignment "${title}" uploaded successfully!`);
+                
+                // Reset form
+                document.getElementById('uploadForm').reset();
+                
+                // Go to assignments page
+                showPage('assignments');
+            }
+        }
+        
+        // Function to view assignment
+        function viewAssignment(index) {
+            const assignment = assignments[index];
+            
+            // Open the file in a new tab or download it
+            if (assignment.fileData) {
+                window.open(assignment.fileData, '_blank');
+            }
+        }
+        
+        // Initialize with home page
+        window.onload = function() {
+            showPage('home');
+        };
+    </script>
+</body>
+</html>
